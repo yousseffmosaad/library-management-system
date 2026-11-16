@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html>
+<head><title>Add Author</title></head>
+<body style="font-family: Arial; margin: 30px;">
+    <h2>Add New Author</h2>
+    <% if (typeof error !== 'undefined') { %><p role="alert" style="color: #b00020;"><%= error %></p><% } %>
+    <form action="/author/add" method="POST" enctype="multipart/form-data">
+        <label>Author ID:</label><br><input type="number" name="author_id" min="1" step="1" required><br><br>
+        <label>Name:</label><br><input type="text" name="name" required><br><br>
+        <label>Country:</label><br><input type="text" name="country"><br><br>
+        <label>Author photo (JPEG, PNG, WebP, or GIF; max 5 MB):</label><br><input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/gif"><br><br>
+        <button type="submit">Save Author</button>
+    </form>
+    <br><a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>

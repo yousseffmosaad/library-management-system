@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><title>Edit Author</title></head>
+<body style="font-family: Arial; margin: 30px;">
+    <h2>Edit Author</h2>
+    <% if (author.photo) { %><p>Current photo:</p><img src="<%= author.photo %>" alt="Photo of <%= author.name %>" style="max-width: 180px; max-height: 180px; object-fit: cover;"><br><br><% } %>
+    <form action="/author/edit/<%= author.author_id %>" method="POST" enctype="multipart/form-data">
+        <label>Name:</label><br><input type="text" name="name" value="<%= author.name %>" required><br><br>
+        <label>Country:</label><br><input type="text" name="country" value="<%= author.country || '' %>"><br><br>
+        <label>Replace photo (JPEG, PNG, WebP, or GIF; max 5 MB):</label><br><input type="file" name="image" accept="image/jpeg,image/png,image/webp,image/gif"><br><br>
+        <button type="submit">Update Author</button>
+    </form>
+    <br><a href="/dashboard">Back to Dashboard</a>
+</body>
+</html>

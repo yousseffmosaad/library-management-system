@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Library Management System</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            color-scheme: dark;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            padding: 28px;
+            background: #070b1d;
+            color: #e8edf7;
+            font-family: Arial, sans-serif;
+        }
+
+        body.light {
+            background: #f2f4fa;
+            color: #202938;
+            color-scheme: light;
+        }
+
+        a {
+            color: #aabaff;
+            text-decoration: none;
+        }
+
+        body.light a {
+            color: #315de8;
+        }
+
+        .container {
+            width: min(100%, 1450px);
+            margin: 0 auto;
+        }
+
+        header,
+        nav,
+        .panel,
+        .stat {
+            background: #11182b;
+            border: 1px solid #202a40;
+            border-radius: 26px;
+            box-shadow: 0 8px 24px #0003;
+        }
+
+        body.light header,
+        body.light nav,
+        body.light .panel,
+        body.light .stat {
+            background: #fff;
+            border-color: #e0e5ef;
+            box-shadow: 0 8px 24px #18223012;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 22px 28px;
+            margin-bottom: 24px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .brand-icon,
+        .user-icon {
+            display: grid;
+            width: 48px;
+            height: 48px;
+            place-items: center;
+            border-radius: 50%;
+            background: linear-gradient(120deg, #6265ff, #a20cff);
+            color: #fff;
+            font-size: 20px;
+            font-weight: 800;
+        }
+
+        .brand h1 {
+            margin: 0;
+            color: #8970ff;
+            font-size: 25px;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .user-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 7px 15px 7px 7px;
+            border: 1px solid #303b55;
+            border-radius: 28px;
+            color: #e8edf7;
+        }
+
+        body.light .user-pill {
+            border-color: #d6dce6;
+            color: #202938;
+        }
+
+        .user-icon {
+            width: 36px;
+            height: 36px;
+            font-size: 16px;
+        }
+
+        nav {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            margin-bottom: 30px;
+            border-radius: 32px;
+        }
+
+        nav a,
+        .button {
+            display: inline-block;
+            padding: 12px 17px;
+            border: 0;
+            border-radius: 24px;
+            background: transparent;
+            color: #dce3f5;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        body.light nav a,
+        body.light .button {
+            color: #344054;
+        }
+
+        nav a:hover,
+        .button:hover {
+            background: #202a40;
+        }
+
+        body.light nav a:hover,
+        body.light .button:hover {
+            background: #e8edf5;
+        }
+
+        nav a.active,
+        .primary {
+            background: linear-gradient(100deg, #6265ff, #a20cff);
+            color: #fff;
+        }
+
+        nav a.active:hover,
+        body.light nav a.active:hover,
+        body.light .primary:hover {
+            background: linear-gradient(100deg, #6265ff, #a20cff);
+            color: #fff;
+        }
+
+        .theme-button {
+            border: 1px solid #303b55;
+            white-space: nowrap;
+        }
+
+        body.light .theme-button {
+            border-color: #d6dce6;
+        }
+
+        .panel {
+            padding: 30px 34px;
+            margin-bottom: 24px;
+        }
+
+        .panel h2 {
+            margin: 0 0 22px;
+            font-size: 22px;
+        }
+
+        .muted {
+            color: #91a0b9;
+        }
+
+        body.light .muted,
+        body.light th,
+        body.light .empty {
+            color: #697586;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+        }
+
+        .stat {
+            padding: 24px;
+            text-align: center;
+            border-radius: 20px;
+        }
+
+        .stat span {
+            display: block;
+            color: #91a0b9;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .stat strong {
+            display: block;
+            margin-top: 10px;
+            color: #7772ff;
+            font-size: 28px;
+        }
+
+        .stat.green strong {
+            color: #00c98d;
+        }
+
+        .stat.purple strong {
+            color: #be52ff;
+        }
+
+        .filters {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(150px, 1fr));
+            gap: 14px;
+        }
+
+        input,
+        select {
+            width: 100%;
+            min-height: 50px;
+            padding: 12px 16px;
+            border: 1px solid #303b55;
+            border-radius: 16px;
+            outline: none;
+            background: #1c293d;
+            color: #e8edf7;
+            font: inherit;
+        }
+
+        body.light input,
+        body.light select {
+            border-color: #d6dce6;
+            background: #fff;
+            color: #202938;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: #7778ff;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .form-actions .button {
+            padding: 14px 24px;
+        }
+
+        .badge {
+            display: inline-block;
+            float: right;
+            padding: 7px 13px;
+            border-radius: 18px;
+            background: #073c3a;
+            color: #00d5a0;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #202a40;
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        body.light th,
+        body.light td {
+            border-bottom-color: #e0e5ef;
+        }
+
+        th {
+            color: #91a0b9;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        td:first-child {
+            color: #91a0b9;
+        }
+
+        td.title {
+            color: #f3f5fb;
+            font-weight: 700;
+        }
+
+        body.light td.title {
+            color: #202938;
+        }
+
+        td.price {
+            color: #00c98d;
+            font-weight: 800;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        .grid .panel {
+            min-width: 0;
+            margin-bottom: 0;
+        }
+
+        .filters-results {
+            margin-top: 24px;
+        }
+
+        .filters-results h2 {
+            margin-bottom: 20px;
+        }
+
+        .actions {
+            white-space: nowrap;
+        }
+
+        .actions a {
+            margin-right: 10px;
+        }
+
+        .empty {
+            color: #91a0b9;
+            text-align: center;
+        }
+
+        .rank {
+            color: #7772ff;
+            font-weight: 800;
+        }
+
+        .cover {
+            display: block;
+            width: 46px;
+            height: 58px;
+            margin-bottom: 7px;
+            border-radius: 6px;
+            object-fit: cover;
+        }
+
+        @media (max-width: 850px) {
+            body {
+                padding: 16px;
+            }
+
+            .filters {
+                grid-template-columns: repeat(2, minmax(140px, 1fr));
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 560px) {
+            header {
+                align-items: flex-start;
+                flex-direction: column;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            .brand h1 {
+                font-size: 20px;
+            }
+
+            nav {
+                border-radius: 20px;
+            }
+
+            nav a {
+                padding: 10px 12px;
+            }
+
+            .panel {
+                padding: 22px 18px;
+            }
+
+            .filters {
+                grid-template-columns: 1fr;
+            }
+
+            .badge {
+                float: none;
+                margin-bottom: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="brand">
+            <div class="brand-icon">L</div>
+            <h1>Library Management System</h1>
+        </div>
+
+        <div class="header-actions">
+            <div class="user-pill">
+                <div class="user-icon">L</div>
+                <span>Library Admin</span>
+            </div>
+            <button class="button theme-button" id="themeToggle" type="button"></button>
+            <a class="button" href="/login">Log out</a>
+        </div>
+    </header>
+
+    <nav>
+        <a class="<%= activeTab === 'manage' ? 'active' : '' %>" href="/dashboard?tab=manage">Manage</a>
+        <a class="<%= activeTab === 'search' ? 'active' : '' %>" href="/dashboard?tab=search">Search Books</a>
+        <a class="<%= activeTab === 'catalogue' ? 'active' : '' %>" href="/dashboard?tab=catalogue">Catalogue</a>
+        <a class="<%= activeTab === 'reports' ? 'active' : '' %>" href="/dashboard?tab=reports">Reports</a>
+        <a class="<%= activeTab === 'loans' ? 'active' : '' %>" href="/dashboard?tab=loans">Loans</a>
+        <a class="<%= activeTab === 'most-borrowed' ? 'active' : '' %>" href="/dashboard?tab=most-borrowed">Most Borrowed</a>
+        <a class="<%= activeTab === 'authors-books' ? 'active' : '' %>" href="/dashboard?tab=authors-books">Authors &amp; Books</a>
+    </nav>
+
+    <% if (activeTab === 'manage') { %>
+        <section class="panel">
+            <h2>Library Overview</h2>
+            <div class="stats">
+                <div class="stat">
+                    <span>Total Books</span>
+                    <strong><%= books.length %></strong>
+                </div>
+                <div class="stat green">
+                    <span>Total Authors</span>
+                    <strong><%= authors.length %></strong>
+                </div>
+                <div class="stat">
+                    <span>Total Library Price</span>
+                    <strong>$<%= Number(summary.total_price || 0).toFixed(2) %></strong>
+                </div>
+                <div class="stat green">
+                    <span>Smallest Price</span>
+                    <strong>$<%= Number(summary.min_price || 0).toFixed(2) %></strong>
+                </div>
+                <div class="stat purple">
+                    <span>Largest Price</span>
+                    <strong>$<%= Number(summary.max_price || 0).toFixed(2) %></strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid">
+            <div class="panel">
+                <h2>Books</h2>
+                <p><a class="button primary" href="/book/add">Add Book</a></p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>ID</th><th>Title</th><th>Price</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody>
+                            <% books.forEach(book => { %>
+                                <tr>
+                                    <td><%= book.book_id %></td>
+                                    <td class="title"><%= book.title %></td>
+                                    <td class="price">$<%= Number(book.price || 0).toFixed(2) %></td>
+                                    <td class="actions">
+                                        <a href="/book/edit/<%= book.book_id %>">Edit</a>
+                                        <a href="/book/delete/<%= book.book_id %>" onclick="return confirm('Delete this book?')">Delete</a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                            <% if (books.length === 0) { %>
+                                <tr><td class="empty" colspan="4">No books found.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Authors</h2>
+                <p><a class="button primary" href="/author/add">Add Author</a></p>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>ID</th><th>Name</th><th>Country</th><th>Actions</th></tr>
+                        </thead>
+                        <tbody>
+                            <% authors.forEach(author => { %>
+                                <tr>
+                                    <td><%= author.author_id %></td>
+                                    <td class="title"><%= author.name %></td>
+                                    <td><%= author.country || '—' %></td>
+                                    <td class="actions">
+                                        <a href="/author/edit/<%= author.author_id %>">Edit</a>
+                                        <a href="/author/delete/<%= author.author_id %>" onclick="return confirm('Delete this author?')">Delete</a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                            <% if (authors.length === 0) { %>
+                                <tr><td class="empty" colspan="4">No authors found.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    <% } else if (activeTab === 'search') { %>
+        <section class="panel">
+            <h2>Search Books <span class="badge">Prepared Statements Active</span></h2>
+            <form action="/dashboard" method="get">
+                <input type="hidden" name="tab" value="search">
+                <div class="filters">
+                    <input type="text" name="keyword" placeholder="Title keyword (e.g. Harry)..." value="<%= filters.keyword || '' %>">
+                    <input class="price-filter" type="number" name="min_price" min="0" step="0.01" placeholder="Min Price ($)" value="<%= filters.min_price || '' %>">
+                    <input class="price-filter" type="number" name="max_price" min="0" step="0.01" placeholder="Max Price ($)" value="<%= filters.max_price || '' %>">
+                    <select name="category_id">
+                        <option value="">All Categories</option>
+                        <% categories.forEach(category => { %>
+                            <option value="<%= category.category_id %>" <%= String(filters.category_id) === String(category.category_id) ? 'selected' : '' %>>
+                                <%= category.name %>
+                            </option>
+                        <% }) %>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button class="button primary" type="submit">Search (Cheapest First)</button>
+                    <a class="button" href="/dashboard?tab=search">Reset</a>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel filters-results">
+            <h2>Matching Books (<%= searchResults.length %>)</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Title</th><th>Author</th><th>Category</th><th>Year</th><th>Price</th></tr>
+                    </thead>
+                    <tbody>
+                        <% searchResults.forEach(book => { %>
+                            <tr>
+                                <td><%= book.book_id %></td>
+                                <td class="title"><%= book.title %></td>
+                                <td><%= book.author_name || '—' %></td>
+                                <td><%= book.category_name || '—' %></td>
+                                <td><%= book.publish_year || '—' %></td>
+                                <td class="price">$<%= Number(book.price || 0).toFixed(2) %></td>
+                            </tr>
+                        <% }) %>
+                        <% if (searchResults.length === 0) { %>
+                            <tr><td class="empty" colspan="6">No matching books found.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    <% } else if (activeTab === 'catalogue') { %>
+        <section class="panel">
+            <h2>Library Catalogue</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>ID</th><th>Title</th><th>Author</th><th>Publisher</th><th>Category</th><th>Year</th><th>Price</th></tr>
+                    </thead>
+                    <tbody>
+                        <% catalogue.forEach(book => { %>
+                            <tr>
+                                <td><%= book.book_id %></td>
+                                <td class="title">
+                                    <% if (book.cover_image) { %>
+                                        <img class="cover" src="<%= book.cover_image %>" alt="Book cover">
+                                    <% } %>
+                                    <%= book.title %>
+                                </td>
+                                <td><%= book.author_name || '—' %></td>
+                                <td><%= book.publisher_name || '—' %></td>
+                                <td><%= book.category_name || '—' %></td>
+                                <td><%= book.publish_year || '—' %></td>
+                                <td class="price">$<%= Number(book.price || 0).toFixed(2) %></td>
+                            </tr>
+                        <% }) %>
+                        <% if (catalogue.length === 0) { %>
+                            <tr><td class="empty" colspan="7">The catalogue is empty.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    <% } else if (activeTab === 'reports') { %>
+        <section class="panel">
+            <h2>Whole Library Price Summary</h2>
+            <div class="stats">
+                <div class="stat">
+                    <span>Total Library Price</span>
+                    <strong>$<%= Number(summary.total_price || 0).toFixed(2) %></strong>
+                </div>
+                <div class="stat green">
+                    <span>Smallest Price</span>
+                    <strong>$<%= Number(summary.min_price || 0).toFixed(2) %></strong>
+                </div>
+                <div class="stat purple">
+                    <span>Largest Price</span>
+                    <strong>$<%= Number(summary.max_price || 0).toFixed(2) %></strong>
+                </div>
+            </div>
+        </section>
+
+        <section class="grid">
+            <div class="panel">
+                <h2>Books &amp; Average Price per Category</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Category</th><th>Total Books</th><th>Average Price</th></tr></thead>
+                        <tbody>
+                            <% categoryStats.forEach(row => { %>
+                                <tr>
+                                    <td class="title"><%= row.category_name %></td>
+                                    <td><%= row.book_count %></td>
+                                    <td class="price">$<%= Number(row.avg_price || 0).toFixed(2) %></td>
+                                </tr>
+                            <% }) %>
+                            <% if (categoryStats.length === 0) { %>
+                                <tr><td class="empty" colspan="3">No category data.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Authors with Multiple Books</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Author Name</th><th>Book Count</th></tr></thead>
+                        <tbody>
+                            <% prolificAuthors.forEach(author => { %>
+                                <tr>
+                                    <td class="title"><%= author.author_name %></td>
+                                    <td class="rank"><%= author.book_count %></td>
+                                </tr>
+                            <% }) %>
+                            <% if (prolificAuthors.length === 0) { %>
+                                <tr><td class="empty" colspan="2">No authors with multiple books.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    <% } else if (activeTab === 'loans') { %>
+        <section class="panel">
+            <h2>Unreturned Loans</h2>
+            <div class="table-wrap">
+                <table>
+                    <thead><tr><th>Loan ID</th><th>Book Title</th><th>Member Name</th><th>Loan Date</th></tr></thead>
+                    <tbody>
+                        <% activeLoans.forEach(loan => { %>
+                            <tr>
+                                <td><%= loan.loan_id %></td>
+                                <td class="title"><%= loan.book_title %></td>
+                                <td><%= loan.member_name %></td>
+                                <td class="price"><%= loan.loan_date %></td>
+                            </tr>
+                        <% }) %>
+                        <% if (activeLoans.length === 0) { %>
+                            <tr><td class="empty" colspan="4">No unreturned loans.</td></tr>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section class="grid">
+            <div class="panel">
+                <h2>Members Without Loans</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>ID</th><th>Name</th><th>Email</th></tr></thead>
+                        <tbody>
+                            <% inactiveMembers.forEach(member => { %>
+                                <tr>
+                                    <td><%= member.member_id %></td>
+                                    <td class="title"><%= member.name %></td>
+                                    <td><%= member.email %></td>
+                                </tr>
+                            <% }) %>
+                            <% if (inactiveMembers.length === 0) { %>
+                                <tr><td class="empty" colspan="3">No members to display.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Unborrowed Books</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>ID</th><th>Title</th><th>Price</th></tr></thead>
+                        <tbody>
+                            <% unborrowedBooks.forEach(book => { %>
+                                <tr>
+                                    <td><%= book.book_id %></td>
+                                    <td class="title"><%= book.title %></td>
+                                    <td class="price">$<%= Number(book.price || 0).toFixed(2) %></td>
+                                </tr>
+                            <% }) %>
+                            <% if (unborrowedBooks.length === 0) { %>
+                                <tr><td class="empty" colspan="3">No unborrowed books.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    <% } else if (activeTab === 'most-borrowed') { %>
+        <section class="grid">
+            <div class="panel">
+                <h2>Top Borrowed Books</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Rank</th><th>Book Title</th><th>Loans</th></tr></thead>
+                        <tbody>
+                            <% topBooks.forEach((book, index) => { %>
+                                <tr>
+                                    <td class="rank">#<%= index + 1 %></td>
+                                    <td class="title"><%= book.title %></td>
+                                    <td class="price"><%= book.loan_count %></td>
+                                </tr>
+                            <% }) %>
+                            <% if (topBooks.length === 0) { %>
+                                <tr><td class="empty" colspan="3">No borrowing data yet.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Member With Most Loans</h2>
+                <% if (topMember) { %>
+                    <div class="table-wrap">
+                        <table>
+                            <thead><tr><th>Member Name</th><th>Total Loans</th></tr></thead>
+                            <tbody>
+                                <tr>
+                                    <td class="title"><%= topMember.name %></td>
+                                    <td class="price"><%= topMember.loan_count %></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                <% } else { %>
+                    <p class="empty">No borrowing data yet.</p>
+                <% } %>
+            </div>
+        </section>
+
+    <% } else if (activeTab === 'authors-books') { %>
+        <section class="grid">
+            <div class="panel">
+                <h2>All Authors &amp; Book Count</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Author</th><th>Country</th><th>Books</th></tr></thead>
+                        <tbody>
+                            <% authorCounts.forEach(author => { %>
+                                <tr>
+                                    <td class="title"><%= author.author_name %></td>
+                                    <td><%= author.country || '—' %></td>
+                                    <td class="rank"><%= author.book_count %></td>
+                                </tr>
+                            <% }) %>
+                            <% if (authorCounts.length === 0) { %>
+                                <tr><td class="empty" colspan="3">No author data.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="panel">
+                <h2>Matching Country (Author &amp; Publisher)</h2>
+                <div class="table-wrap">
+                    <table>
+                        <thead><tr><th>Book Title</th><th>Author</th><th>Publisher</th><th>Country</th></tr></thead>
+                        <tbody>
+                            <% sameCountryBooks.forEach(book => { %>
+                                <tr>
+                                    <td class="title"><%= book.title %></td>
+                                    <td><%= book.author_name %></td>
+                                    <td><%= book.publisher_name %></td>
+                                    <td class="price"><%= book.country %></td>
+                                </tr>
+                            <% }) %>
+                            <% if (sameCountryBooks.length === 0) { %>
+                                <tr><td class="empty" colspan="4">No matching books.</td></tr>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    <% } %>
+</div>
+
+<script>
+    const themeButton = document.getElementById('themeToggle');
+    const savedTheme = localStorage.getItem('library-theme');
+
+    if (savedTheme === 'light') {
+        document.body.classList.add('light');
+    }
+
+    function updateThemeButton() {
+        const isLight = document.body.classList.contains('light');
+        themeButton.textContent = isLight ? '🌙' : '☀️';
+        themeButton.setAttribute('aria-label', isLight ? 'Switch to dark mode' : 'Switch to light mode');
+        themeButton.setAttribute('title', isLight ? 'Switch to dark mode' : 'Switch to light mode');
+    }
+
+    updateThemeButton();
+
+    themeButton.addEventListener('click', () => {
+        document.body.classList.toggle('light');
+
+        const isLight = document.body.classList.contains('light');
+        localStorage.setItem('library-theme', isLight ? 'light' : 'dark');
+
+        updateThemeButton();
+    });
+
+    const priceInputs = document.querySelectorAll('.price-filter');
+
+    priceInputs.forEach(input => {
+        const correctNegativeValue = () => {
+            if (input.value !== '' && Number(input.value) < 0) {
+                input.value = '0';
+            }
+        };
+
+        input.addEventListener('keydown', event => {
+            if (event.key === '-' || event.key === 'Subtract') {
+                event.preventDefault();
+            }
+        });
+
+        input.addEventListener('input', correctNegativeValue);
+        input.addEventListener('change', correctNegativeValue);
+        input.addEventListener('blur', correctNegativeValue);
+
+        correctNegativeValue();
+    });
+</script>
+</body>
+</html>
